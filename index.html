@@ -249,7 +249,7 @@ function shownName(x){const en=nameMode==='full'?(x.fullName||x.name):x.name;ret
 
 function render(){
  const q=norm($('schQuery').value),cl=$('schClinic').value,day=$('schDay').value;
- const a=SCH_DATA.filter(x=>(!q||norm(x.name+' '+arabicName(x)+' '+(x.fullName||'')+' '+x.clinic+' '+(clinicAr[x.clinic]||'')+' '+(x.room||'')).includes(q))&&(cl==='all'||x.clinic===cl)&&(day==='all'||String(x.day)===day)).sort((x,y)=>clinicOrder(x.clinic).localeCompare(clinicOrder(y.clinic),undefined,{numeric:true})||roomNumber(x)-roomNumber(y)||x.day-y.day||x.period-y.period;
+ const a=SCH_DATA.filter(x=>(!q||norm(x.name+' '+arabicName(x)+' '+(x.fullName||'')+' '+x.clinic+' '+(clinicAr[x.clinic]||'')+' '+(x.room||'')).includes(q))&&(cl==='all'||x.clinic===cl)&&(day==='all'||String(x.day)===day)).sort((x,y)=>clinicOrder(x.clinic).localeCompare(clinicOrder(y.clinic),undefined,{numeric:true})||roomNumber(x)-roomNumber(y)||x.day-y.day||x.period-y.period);
  $('schCount').textContent=`${a.length} فترة مجدولة مطابقة`;
  $('schShortNamesBtn').classList.toggle('active',nameMode==='short');$('schFullNamesBtn').classList.toggle('active',nameMode==='full');
  $('schNamesNote').textContent=nameMode==='full'?'الأسماء الرسمية للأطباء حسب السجل.':'أسماء الأطباء كما تظهر في الجدول.';
