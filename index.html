@@ -234,10 +234,11 @@ const $=id=>document.getElementById(id);
 const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').trim();
 const clinicAr={"Anesthesia":"التخدير","Chest":"الصدرية","Infectious disease":"الأمراض المعدية","Hematology":"أمراض الدم","Ophthalmology 1":"العيون 1","Ophthalmology 2":"العيون 2","Ophthalmology 3":"العيون 3","Pediatric":"الأطفال","Dev. & Beh. Disorder":"اضطرابات النمو والسلوك","Newborn":"حديثو الولادة","Physical Medicine & Rehabilitation":"الطب الطبيعي والتأهيل","Neurosurgery":"جراحة المخ والأعصاب","Psychiatric":"الطب النفسي","Gastroenterology":"الجهاز الهضمي","OB/Gyn":"النساء والولادة","Medical":"الباطنية","Cardiology":"القلب","Minor Surgery":"الجراحة الصغرى","Pediatric Surgery":"جراحة الأطفال","Surgery":"الجراحة العامة","Urology":"المسالك البولية","Orthopedic 1":"العظام 1","Orthopedic 2":"العظام 2","ENT":"الأنف والأذن والحنجرة","Dermatology":"الجلدية","Nephrology":"الكلى","Neurology":"الأعصاب","Rheumatology":"الروماتيزم","Plastic Surgery":"جراحة التجميل","Optometry 1":"قياس النظر 1","Optometry 2":"قياس النظر 2","Optometry 3":"قياس النظر 3","Audiology":"السمعيات","Psychotherapy":"العلاج النفسي","Quality of work life":"جودة الحياة الوظيفية"};
+let lang='ar';
 const clinicName=c=>lang==='ar'?(clinicAr[c]||c):c;
 const clinicOrder=c=>{let m=c.match(/^(Ophthalmology|Optometry|Orthopedic)\s+(\d+)$/);return m?m[1]+String(m[2]).padStart(2,"0"):c};
 const roomNumber=x=>{const n=Number(x.room);return Number.isFinite(n)&&n>0?n:9999};
-const clinics=[...new Set(SCH_DATA.map(x=>x.clinic))].sort((a,b)=>Math.min(...SCH_DATA.filter(x=>x.clinic===a).map(roomNumber))-Math.min(...SCH_DATA.filter(x=>x.clinic===b).map(roomNumber))||clinicOrder(a).localeCompare(clinicOrder(b)));
+const clinics=[...new Set(SCH_DATA.map(x=>x.clinic))].sort((a,b)=>clinicOrder(a).localeCompare(clinicOrder(b),undefined,{numeric:true})||Math.min(...SCH_DATA.filter(x=>x.clinic===a).map(roomNumber))-Math.min(...SCH_DATA.filter(x=>x.clinic===b).map(roomNumber)));
 $('schClinic').innerHTML='<option value="all">كل التخصصات</option>'+clinics.map(c=>`<option value="${safe(c)}">${safe(clinicName(c))}</option>`).join('');
 $('schWeek').textContent='أسبوع الجدول: '+(WEEK[0]||'غير محدد')+' إلى '+(WEEK[4]||'غير محدد')+'';
 let view='calendar',nameMode='short';
@@ -248,7 +249,7 @@ function shownName(x){const en=nameMode==='full'?(x.fullName||x.name):x.name;ret
 
 function render(){
  const q=norm($('schQuery').value),cl=$('schClinic').value,day=$('schDay').value;
- const a=SCH_DATA.filter(x=>(!q||norm(x.name+' '+arabicName(x)+' '+(x.fullName||'')+' '+x.clinic+' '+(clinicAr[x.clinic]||'')+' '+(x.room||'')).includes(q))&&(cl==='all'||x.clinic===cl)&&(day==='all'||String(x.day)===day)).sort((x,y)=>roomNumber(x)-roomNumber(y)||clinicOrder(x.clinic).localeCompare(clinicOrder(y.clinic))||x.day-y.day||x.period-y.period;
+ const a=SCH_DATA.filter(x=>(!q||norm(x.name+' '+arabicName(x)+' '+(x.fullName||'')+' '+x.clinic+' '+(clinicAr[x.clinic]||'')+' '+(x.room||'')).includes(q))&&(cl==='all'||x.clinic===cl)&&(day==='all'||String(x.day)===day)).sort((x,y)=>clinicOrder(x.clinic).localeCompare(clinicOrder(y.clinic),undefined,{numeric:true})||roomNumber(x)-roomNumber(y)||x.day-y.day||x.period-y.period;
  $('schCount').textContent=`${a.length} فترة مجدولة مطابقة`;
  $('schShortNamesBtn').classList.toggle('active',nameMode==='short');$('schFullNamesBtn').classList.toggle('active',nameMode==='full');
  $('schNamesNote').textContent=nameMode==='full'?'الأسماء الرسمية للأطباء حسب السجل.':'أسماء الأطباء كما تظهر في الجدول.';
@@ -270,7 +271,7 @@ function render(){
 $('schArabicBtn').onclick=()=>{lang='ar';updateLanguage()};$('schEnglishBtn').onclick=()=>{lang='en';updateLanguage()};
 $('schShortNamesBtn').onclick=()=>{nameMode='short';render()};$('schFullNamesBtn').onclick=()=>{nameMode='full';render()};
 $('schCalendarBtn').onclick=()=>{view='calendar';render()};$('schListBtn').onclick=()=>{view='list';render()};
-$('scheduleLaunch').onclick=()=>{$('scheduleLayer').classList.add('open');render()};$('scheduleClose').onclick=()=>$('scheduleLayer').classList.remove('open');$('scheduleLayer').addEventListener('click',e=>{if(e.target===$('scheduleLayer'))$('scheduleLayer').classList.remove('open')});
+$('scheduleLaunch').onclick=()=>{$('scheduleLayer').classList.add('open');render();renderLeaves()};$('scheduleClose').onclick=()=>$('scheduleLayer').classList.remove('open');$('scheduleLayer').addEventListener('click',e=>{if(e.target===$('scheduleLayer'))$('scheduleLayer').classList.remove('open')});
 ['schQuery','schClinic','schDay'].forEach(id=>$(id).addEventListener('input',render));
 })();
 </script>
