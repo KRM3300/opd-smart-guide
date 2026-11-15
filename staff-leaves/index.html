@@ -9,36 +9,35 @@
   :root { --ink: #1c2e45; --soft: #5b6b7a; --line: #dbe3ea; --line2: #b8c6d3; --bg: #f2f5f8; --card: #fff; --act: #0f5a87; --leave: #8a5a00; --leave-bg: #fff4dc; --bad: #b42318; --ok: #1f7a45; }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: "IBM Plex Sans Arabic", system-ui, Tahoma, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
-  .wrap { max-width: 1040px; margin: auto; padding: 18px 16px 40px; }
+  .wrap { max-width: 1320px; margin: auto; padding: 18px 16px 40px; }
   a { color: var(--act); }
   h1 { font-size: 24px; margin: 14px 0 4px; }
   h2 { font-size: 19px; margin: 0 0 10px; }
   .sub { color: var(--soft); margin: 0 0 16px; }
-  .weekbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 14px; }
-  .weekbar strong { font-size: 16px; margin-inline: 4px; }
+  .rgwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+  table.rg { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1120px; font-size: 13.5px; margin: 0; }
+  table.rg th, table.rg td { border-bottom: 1px solid var(--line); border-inline-start: 1px solid var(--line); padding: 5px 6px; text-align: center; vertical-align: top; }
+  table.rg thead th { background: #e8f0f6; color: var(--ink); font-weight: 600; }
+  table.rg thead th.grp small { display: block; font-weight: 500; color: var(--soft); font-size: 12px; }
+  table.rg th.day { position: sticky; right: 0; z-index: 1; background: #f7fafc; min-width: 86px; white-space: nowrap; }
+  table.rg thead th.day { background: #e8f0f6; }
+  table.rg tbody th.day b { display: block; font-size: 13.5px; }
+  table.rg tbody th.day span { color: var(--soft); font-size: 12.5px; }
+  table.rg td div { line-height: 1.5; white-space: nowrap; }
+  table.rg td div.lbl { color: var(--soft); font-style: italic; }
+  table.rg tr.wk > * { border-top: 3px solid var(--line2); }
+  table.rg tr.off > * { background: #e9edf1; color: var(--soft); }
+  table.rg tr.now > th.day { background: #dceefa; box-shadow: inset -4px 0 0 var(--act); }
+  table.rg td.lv, table.rg th.lvh { background: var(--leave-bg); color: var(--leave); font-weight: 600; min-width: 110px; }
+  table.rg tr.off td.lv { background: #e9edf1; }
+  table.rg td.edit { cursor: pointer; }
+  table.rg td.edit:hover, table.rg td.edit:focus-visible { background: #eef6fc; outline: 2px solid var(--act); outline-offset: -2px; }
+  .monthbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 12px; }
+  .monthbar strong { font-size: 16px; margin-inline: 4px; }
   button, .btn { font: inherit; font-size: 15px; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--act); background: var(--act); color: #fff; cursor: pointer; }
   button.alt { background: var(--card); color: var(--act); }
   button:disabled { opacity: 0.6; cursor: default; }
   button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #8fc3e6; outline-offset: 1px; }
-  .shifts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .shift { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-  .shift header { padding: 10px 14px; background: #e8f0f6; border-bottom: 1px solid var(--line); }
-  .shift header b { display: block; font-size: 16px; }
-  .shift header span { color: var(--soft); font-size: 14px; direction: ltr; unicode-bidi: isolate; }
-  .role { padding: 9px 14px; border-bottom: 1px solid var(--line); }
-  .role:last-child { border-bottom: 0; }
-  .role h3 { margin: 0 0 4px; font-size: 13.5px; color: var(--soft); font-weight: 600; }
-  .role ul { margin: 0; padding: 0; list-style: none; }
-  .role li { padding: 2px 0; }
-  .tag { display: inline-block; font-size: 12.5px; color: var(--soft); border: 1px solid var(--line2); border-radius: 6px; padding: 0 6px; margin-inline-start: 6px; }
-  .tag.lv { color: var(--leave); border-color: #e9c77b; background: var(--leave-bg); }
-  .gap { color: var(--leave); font-size: 13.5px; }
-  .boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-  .box { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
-  .box.lvbox { border-color: #e9c77b; background: #fffaf0; }
-  .box ul { margin: 0; padding: 0; list-style: none; }
-  .box li { padding: 5px 0; border-bottom: 1px dashed var(--line); display: flex; justify-content: space-between; gap: 10px; }
-  .box li:last-child { border-bottom: 0; }
   .muted { color: var(--soft); font-size: 14px; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 18px; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
@@ -62,7 +61,7 @@
   .credit { direction: ltr; text-align: center; margin: 28px auto 0; padding-top: 12px; border-top: 1px solid var(--line); max-width: 340px; line-height: 1.6; }
   .credit div, .credit span { color: var(--soft); font-size: 14px; }
   .credit strong { display: block; font-size: 17px; }
-  @media (max-width: 820px) { .shifts { grid-template-columns: 1fr; } .boxes { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .wrap { padding-inline: 12px; } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -70,26 +69,16 @@
 <div class="wrap">
   <a href="../">← العودة إلى الدليل الرئيسي</a>
   <h1>جدول الموظفين والإجازات</h1>
-  <p class="sub">الجدول الأسبوعي للعيادات الخارجية، ومن في إجازة، وطلب إجازة جديدة.</p>
+  <p class="sub">جدول العيادات الخارجية لأربعة أسابيع، ومن في إجازة، وطلب إجازة جديدة.</p>
 
-  <div class="weekbar">
-    <button class="alt" type="button" id="prev" aria-label="الأسبوع السابق">الأسبوع السابق</button>
-    <strong id="weekTitle" aria-live="polite"></strong>
-    <button class="alt" type="button" id="next" aria-label="الأسبوع التالي">الأسبوع التالي</button>
-    <button class="alt" type="button" id="thisWeek">هذا الأسبوع</button>
+  <div class="monthbar">
+    <button class="alt" type="button" id="prev">الأسابيع السابقة</button>
+    <strong id="monthTitle" aria-live="polite"></strong>
+    <button class="alt" type="button" id="next">الأسابيع التالية</button>
+    <button class="alt" type="button" id="thisWeek">من هذا الأسبوع</button>
   </div>
-  <div id="schedule" class="shifts" aria-live="polite"></div>
-  <p id="noWeek" class="card hidden">لم يُجهّز جدول هذا الأسبوع بعد.</p>
-  <div class="boxes">
-    <section class="box lvbox">
-      <h2>في إجازة هذا الأسبوع</h2>
-      <ul id="onLeave"></ul>
-    </section>
-    <section class="box">
-      <h2>إجازات قادمة</h2>
-      <ul id="upcoming"></ul>
-    </section>
-  </div>
+  <div class="rgwrap" id="schedule" aria-live="polite"></div>
+  <p class="muted">من في إجازة معتمدة يظهر في عمود «الإجازات» في أيامها، ويرجع لخانته بعدها تلقائياً.</p>
 
   <section class="card" id="request">
     <h2>طلب إجازة</h2>
@@ -151,62 +140,75 @@
   const dm = (s) => +s.slice(8, 10) + "/" + +s.slice(5, 7);
   /* أول يوم عمل بعد نهاية الإجازة (الجمعة والسبت عطلة) */
   const back = (s) => { let d = add(s, 1); while ([5, 6].includes(D(d).getDay())) d = add(d, 1); return d; };
-  let week = sundayOf(today());
-
-  function onLeave(leaves, staffId, day) {
-    return leaves.find((l) => l.staff_id === staffId && l.start <= day && l.end >= day);
+  let from = sundayOf(today());
+  /* الجدول الشهري: 4 أسابيع، أعمدة الشيت، والإجازات في عمود مستقل */
+  const COLS = [["A", "supervisor"], ["A", "reception"], ["A", "transfer"], ["A", "eye"], ["B", "supervisor"], ["B", "reception"], ["B", "transfer"], ["B", "eye"], ["C", "supervisor"], ["C", "reception"], ["B", "eservices"]];
+  const GROUPS = [["الشفت الأول", "7:30 ص – 3:30 م", 4], ["الشفت الثاني", "11:30 ص – 7:30 م", 4], ["الشفت الثالث", "3:30 م – 11:30 م", 2], ["الخدمات الإلكترونية", "11:30 ص – 7:30 م", 1]];
+  const ROLE_NAMES = { supervisor: "المشرف", reception: "الاستقبال", transfer: "التحويل", eye: "مركز العيون", eservices: "الموظف" };
+  function applies(r, d) {
+    if (d < r.valid_from || (r.valid_to && d > r.valid_to)) return false;
+    if (r.one_day) return d === r.valid_from;
+    const w = D(d).getDay();
+    return r.weekday == null ? w <= 4 : w === r.weekday;
   }
-  async function loadWeek() {
-    const end = add(week, 6);
-    $("weekTitle").textContent = "الأسبوع من " + dm(week) + " إلى " + dm(end);
-    $("schedule").replaceChildren(el("p", "جارٍ التحميل…", "muted"));
-    let data;
-    try { data = await rpc("opd_team_week", { p_week: week }); }
-    catch (e) { $("schedule").replaceChildren(el("p", e.message, "msg bad")); return; }
-    const { slots, leaves } = data;
-    const work = [0, 1, 2, 3, 4].map((i) => add(week, i));
-    $("noWeek").classList.toggle("hidden", slots.length > 0);
-    $("schedule").classList.toggle("hidden", !slots.length);
-    const cards = SHIFTS.map(([code, title, time, roles]) => {
-      const card = el("section", null, "shift");
-      const h = el("header");
-      h.append(el("b", title), el("span", time));
-      card.append(h);
-      for (const role of roles) {
-        const list = slots.filter((s) => s.shift === code && s.role === role);
-        if (!list.length) continue;
-        const box = el("div", null, "role"), ul = el("ul");
-        box.append(el("h3", ROLES[role]));
-        for (const s of list) {
-          const days = s.day == null ? work : [add(week, s.day)];
-          const off = s.staff_id ? days.filter((d) => onLeave(leaves, s.staff_id, d)) : [];
-          const li = el("li");
-          if (s.staff_id && off.length === days.length) {
-            li.append(el("span", s.name + " — في إجازة", "gap"));
-          } else {
-            li.append(document.createTextNode(s.name || s.label));
-            if (s.day != null) li.append(el("span", DAYS[s.day], "tag"));
-            if (off.length) li.append(el("span", "إجازة " + off.map((d) => DAYS[D(d).getDay()]).join("، "), "tag lv"));
-          }
-          ul.append(li);
+  /* roster: خانات بأسمائها (name/label)، leaves: {staff_id,name,start,end}، onCell اختياري للتعديل */
+  function rosterGrid(from, roster, leaves, onCell) {
+    const t = el("table", null, "rg"), thead = el("thead"), h1 = el("tr"), h2 = el("tr");
+    const th = (txt, cls, rs, cs) => { const e = el("th", txt, cls); if (rs) e.rowSpan = rs; if (cs) e.colSpan = cs; return e; };
+    h1.append(th("اليوم", "day", 2));
+    for (const [g, time, n] of GROUPS) { const e = th(g + " ", "grp", 0, n); e.append(el("small", time)); h1.append(e); }
+    h1.append(th("الإجازات", "lvh", 2));
+    for (const [, role] of COLS) h2.append(th(ROLE_NAMES[role]));
+    thead.append(h1, h2);
+    const tb = el("tbody"), now = today();
+    for (let i = 0; i < 28; i++) {
+      const d = add(from, i), w = D(d).getDay(), tr = el("tr");
+      if (w === 0) tr.classList.add("wk");
+      if (w === 5) tr.classList.add("off");
+      if (d === now) tr.classList.add("now");
+      const dc = el("th", null, "day");
+      dc.scope = "row";
+      dc.append(el("b", DAYS[w]), el("span", dm(d)));
+      tr.append(dc);
+      const away = leaves.filter((l) => l.start <= d && l.end >= d);
+      const awayIds = new Set(away.map((l) => l.staff_id));
+      for (const [shift, role] of COLS) {
+        const all = roster.filter((r) => r.shift === shift && r.role === role && applies(r, d));
+        const td = el("td");
+        for (const r of all) {
+          if (r.staff_id && awayIds.has(r.staff_id)) continue;
+          td.append(el("div", r.name || r.label, r.staff_id ? "" : "lbl"));
         }
-        box.append(ul);
-        card.append(box);
+        if (onCell && w !== 5) {
+          td.tabIndex = 0;
+          td.classList.add("edit");
+          td.setAttribute("role", "button");
+          td.setAttribute("aria-label", "تعديل " + ROLE_NAMES[role] + " " + GROUPS[{ A: 0, B: 1, C: 2 }[shift]][0] + " يوم " + DAYS[w] + " " + dm(d));
+          const go = () => onCell(d, shift, role, all, awayIds);
+          td.onclick = go;
+          td.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
+        }
+        tr.append(td);
       }
-      return card;
-    });
-    $("schedule").replaceChildren(...cards);
-    const now = leaves.filter((l) => l.start <= end && l.end >= week);
-    const next = leaves.filter((l) => l.start > end);
-    const fill = (ul, rows, empty, txt) => {
-      ul.replaceChildren(...(rows.length ? rows.map((l) => { const li = el("li"); li.append(el("span", l.name), el("span", txt(l), "muted")); return li; }) : [el("li", empty, "muted")]));
-    };
-    fill($("onLeave"), now, "لا أحد في إجازة هذا الأسبوع", (l) => "من " + dm(l.start) + " إلى " + dm(l.end) + " — يعود " + DAYS[D(back(l.end)).getDay()] + " " + dm(back(l.end)));
-    fill($("upcoming"), next, "لا توجد إجازات معتمدة قادمة", (l) => "من " + dm(l.start) + " إلى " + dm(l.end));
+      const lv = el("td", null, "lv");
+      for (const l of away) lv.append(el("div", l.name));
+      tr.append(lv);
+      tb.append(tr);
+    }
+    t.append(thead, tb);
+    return t;
   }
-  $("prev").onclick = () => { week = add(week, -7); loadWeek(); };
-  $("next").onclick = () => { week = add(week, 7); loadWeek(); };
-  $("thisWeek").onclick = () => { week = sundayOf(today()); loadWeek(); };
+  async function loadMonth() {
+    $("monthTitle").textContent = "من " + dm(from) + " إلى " + dm(add(from, 27));
+    $("schedule").replaceChildren(el("p", "جارٍ التحميل…", "muted"));
+    try {
+      const data = await rpc("opd_team_month", { p_from: from });
+      $("schedule").replaceChildren(rosterGrid(from, data.roster, data.leaves));
+    } catch (e) { $("schedule").replaceChildren(el("p", e.message, "msg bad")); }
+  }
+  $("prev").onclick = () => { from = add(from, -28); loadMonth(); };
+  $("next").onclick = () => { from = add(from, 28); loadMonth(); };
+  $("thisWeek").onclick = () => { from = sundayOf(today()); loadMonth(); };
 
   /* طلب الإجازة */
   const msg = (t, ok) => { $("msg").textContent = t || ""; $("msg").className = "msg " + (ok ? "ok" : "bad"); };
@@ -276,7 +278,7 @@
   }
   $("mine").onclick = showMine;
 
-  loadWeek();
+  loadMonth();
   loadNames();
 })();
 </script>
