@@ -54,7 +54,15 @@
     if (!layer || !style || !code || !launch) throw new Error("schedule");
     document.head.append(document.importNode(style, true));
     const close = layer.querySelector("#scheduleClose");
-    if (close) close.style.display = "none"; /* صفحة عامة: بدون رابط للمنصة */
+    /* الرابط العام بدون زر؛ زر «العودة للمنصة» يظهر فقط إذا انفتح الجدول من بطاقة المنصة */
+    const fromPortal = new URLSearchParams(location.search).get("from") === "portal";
+    if (close) {
+      if (fromPortal) {
+        close.removeAttribute("onclick");
+        close.textContent = "→ العودة للمنصة";
+        close.href = "https://krm3300.github.io/outpatient-clinics-portal/";
+      } else close.style.display = "none";
+    }
     document.body.append(document.importNode(launch, true), document.importNode(layer, true));
     const s = document.createElement("script");
     s.textContent = code.textContent;
@@ -64,6 +72,8 @@
     document.getElementById("scheduleLaunch").click();
     L.classList.add("open");
     L.style.display = "flex";
+    const back = document.getElementById("scheduleClose");
+    if (back && fromPortal) back.onclick = (e) => { e.preventDefault(); location.href = back.href; };
     const cr = document.createElement("div");
     cr.className = "credit";
     cr.innerHTML = "<div>Prepared by</div><strong>Khalid Rumayh Alrumayh</strong><span>Information Systems Specialist</span>";
