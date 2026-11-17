@@ -190,7 +190,7 @@ function back(){ $('detail').classList.add('hidden');$('listing').classList.remo
 $('back').onclick=back;$('search').oninput=()=>{if(!$('detail').classList.contains('hidden'))back();render()};
 $('clear').onclick=()=>{$('search').value='';category='الكل';render();$('search').focus()};
 $('share').onclick=async()=>{const u=location.href.split('#')[0]+'#'+currentId;try{await navigator.clipboard.writeText(u);$('share').textContent='تم نسخ الرابط'}catch(e){prompt('انسخ الرابط:',u)}};
-render();renderLeaves();if(/^#OPH-\d+$/.test(location.hash))openRoute(location.hash.slice(1),false);
+render();if(typeof renderLeaves==='function')renderLeaves();if(/^#OPH-\d+$/.test(location.hash))openRoute(location.hash.slice(1),false);
 </script>
 <script>
 // Additive visualization: reads existing route data, never modifies original content.
