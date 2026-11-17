@@ -63,7 +63,10 @@
   .credit strong { display: block; font-size: 17px; }
   @media (max-width: 560px) { .wrap { padding-inline: 12px; } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  header.site-header{background:#0f3a57;color:#fff;border-bottom:4px solid #1691cf}header.site-header .hwrap{display:flex;align-items:center;gap:20px;max-width:1080px;margin:auto;padding:20px 16px}.site-logo{display:block;height:76px;width:auto;flex:0 0 auto;padding:8px 10px;background:#fff;border-radius:10px}.site-titles{flex:1 1 auto;min-width:0}.site-titles .crumb{display:block;font-size:13px;color:#b7d3e6;margin-bottom:2px}.site-titles h1{margin:0;color:#fff;font-size:clamp(22px,4.2vw,30px);line-height:1.35}.site-titles p{margin:4px 0 0;font-size:14px;color:#b7d3e6;line-height:1.7}.site-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.site-actions a.back{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;color:#fff!important;text-decoration:none;border:1px solid rgb(255 255 255 / .35);font-size:14px;font-weight:600;background:transparent}.site-actions a.back:hover,.site-actions a.back:focus-visible{background:rgb(255 255 255 / .1);border-color:#fff;outline:0}.site-actions svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}@media(max-width:640px){header.site-header .hwrap{flex-wrap:wrap;gap:12px;padding:14px 16px 18px}.site-logo{height:58px;padding:6px 8px}.site-titles{order:3;flex-basis:100%}.site-actions{margin-inline-start:auto}}
+#opdGate{background:rgb(15 58 87 / .92)!important}#opdGate .opd-gate-card{background:#fff!important;color:#12324a!important;border:1px solid #dbe4ea!important}#opdGate p{color:#4f6b80!important}#opdGate button{background:#0f6fa3!important}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <style>#opdGate{position:fixed;inset:0;z-index:2147483647;background:linear-gradient(140deg,#061421,#103b56);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,Tahoma,sans-serif}#opdGate[hidden]{display:none!important}#opdGate .opd-gate-card{background:#102b40;color:#f4fbff;border:1px solid #2a607a;border-radius:18px;padding:26px;max-width:400px;width:100%;text-align:center}#opdGate h2{margin:6px 0 8px}#opdGate p{color:#c2d7e4;line-height:1.7}#opdGate button{font:inherit;font-size:16px;border:0;border-radius:10px;padding:11px 18px;background:#087da6;color:#fff;cursor:pointer;width:100%}</style>
@@ -91,10 +94,8 @@ check();
 })();
 </script>
 
+<header class="site-header"><div class="hwrap"><img class="site-logo" src="https://krm3300.github.io/outpatient-clinics-portal/assets/logo.webp" width="220" height="144" alt="شعار مستشفى الرس العام"><div class="site-titles"><span class="crumb">منصة العيادات الخارجية · دليل الموظف الذكي</span><h1>جدول الموظفين والإجازات</h1><p>جدول العيادات الخارجية لأربعة أسابيع، ومن في إجازة، وطلب إجازة جديدة.</p></div><div class="site-actions"><a class="back" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><span>العودة للدليل</span></a><a class="back" href="https://krm3300.github.io/outpatient-clinics-portal/"><span>المنصة</span></a></div></div></header>
 <div class="wrap">
-  <a href="../">← العودة إلى الدليل الرئيسي</a>
-  <h1>جدول الموظفين والإجازات</h1>
-  <p class="sub">جدول العيادات الخارجية لأربعة أسابيع، ومن في إجازة، وطلب إجازة جديدة.</p>
 
   <div class="monthbar">
     <button class="alt" type="button" id="prev">الأسابيع السابقة</button>
