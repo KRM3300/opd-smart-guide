@@ -66,6 +66,31 @@
 </style>
 </head>
 <body>
+<style>#opdGate{position:fixed;inset:0;z-index:2147483647;background:linear-gradient(140deg,#061421,#103b56);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,Tahoma,sans-serif}#opdGate[hidden]{display:none!important}#opdGate .opd-gate-card{background:#102b40;color:#f4fbff;border:1px solid #2a607a;border-radius:18px;padding:26px;max-width:400px;width:100%;text-align:center}#opdGate h2{margin:6px 0 8px}#opdGate p{color:#c2d7e4;line-height:1.7}#opdGate button{font:inherit;font-size:16px;border:0;border-radius:10px;padding:11px 18px;background:#087da6;color:#fff;cursor:pointer;width:100%}</style>
+<div id="opdGate" role="dialog" aria-modal="true" aria-label="دخول دليل الموظف الذكي"><div class="opd-gate-card"><h2>دليل الموظف الذكي</h2><p id="opdGateMsg">جارٍ التحقق من دخولك…</p><button id="opdGateGo" type="button">تسجيل الدخول في المنصة</button></div></div><script id="opd-gate-script">(function(){
+/* بوابة الدليل: الدخول من منصة العيادات الخارجية فقط، لمن عنده صلاحية «دليل الموظف الذكي» */
+var SB="https://omugonzzrulsdpnycact.supabase.co",KEY="sb_publishable_f3IjPvIbMruO9jGb4SmT7Q_NOqgEbXs",STORE="sb-omugonzzrulsdpnycact-auth-token",PORTAL="https://krm3300.github.io/outpatient-clinics-portal/";
+var gate=document.getElementById("opdGate"),msg=document.getElementById("opdGateMsg"),go=document.getElementById("opdGateGo");
+try{localStorage.removeItem("opd-guide-verified-v2")}catch(e){}
+function show(t,btn){gate.hidden=false;msg.textContent=t;go.textContent=btn||"تسجيل الدخول في المنصة";}
+function read(){try{return JSON.parse(localStorage.getItem(STORE)||"null")}catch(e){return null}}
+async function refresh(s){var r=await fetch(SB+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:s.refresh_token})});if(!r.ok)return null;var n=await r.json();try{localStorage.setItem(STORE,JSON.stringify(n))}catch(e){}return n;}
+async function check(){
+ var s=read();
+ if(!s||!s.access_token)return show("الدليل متاح لموظفي العيادات الخارجية. سجّل دخولك في منصة العيادات الخارجية، ثم افتح الدليل من بطاقته.");
+ try{
+  if(s.expires_at&&s.expires_at*1000<Date.now()+30000){s=s.refresh_token?await refresh(s):null;if(!s)return show("انتهت جلستك. سجّل دخولك في المنصة من جديد، ثم افتح الدليل.");}
+  var r=await fetch(SB+"/rest/v1/rpc/opd_has_perm",{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},body:JSON.stringify({p:"guide_view"})});
+  if(r.status===401){s=s.refresh_token?await refresh(s):null;if(!s)return show("انتهت جلستك. سجّل دخولك في المنصة من جديد، ثم افتح الدليل.");return check();}
+  if(r.ok&&(await r.json())===true){gate.hidden=true;return;}
+  show("حسابك ما عليه صلاحية «دليل الموظف الذكي». اطلبها من حسابك في المنصة، وبعد اعتمادها افتح الدليل.","فتح المنصة");
+ }catch(e){show("تعذّر التحقق من الصلاحية. تأكد من الاتصال وحاول مرة ثانية.","فتح المنصة");}
+}
+go.onclick=function(){location.href=PORTAL;};
+check();
+})();
+</script>
+
 <div class="wrap">
   <a href="../">← العودة إلى الدليل الرئيسي</a>
   <h1>جدول الموظفين والإجازات</h1>

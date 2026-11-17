@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f3a57" />
 <title>جدول العيادات الخارجية | مستشفى الرس العام</title>
+<meta name="description" content="جدول أطباء العيادات الخارجية بمستشفى الرس العام لهذا الأسبوع" />
 <style>
   body { margin: 0; font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif; background: #f2f5f8; color: #1c2e45; }
   #gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; }
@@ -23,15 +24,10 @@
 </head>
 <body>
 <div id="gate">
-  <form class="box" id="gateForm">
+  <div class="box" id="gateForm">
     <h1>جدول العيادات الخارجية</h1>
-    <p>اكتب رقمك الوظيفي المسجّل في منصة العيادات الخارجية.</p>
-    <input id="emp" inputmode="numeric" autocomplete="off" placeholder="الرقم الوظيفي" aria-label="الرقم الوظيفي" required />
-    <button type="submit" id="go">دخول</button>
-    <div class="err" id="err" role="alert"></div>
-    <p style="margin-top: 10px">ما عندك صلاحية؟ اطلب «جدول العيادات: اطلاع» من حسابك في <a href="https://krm3300.github.io/outpatient-clinics-portal/">منصة العيادات الخارجية</a>.</p>
-    <div class="credit"><div>Prepared by</div><strong>Khalid Rumayh Alrumayh</strong><span>Information Systems Specialist</span></div>
-  </form>
+    <p id="err" role="status">جارٍ تحميل الجدول…</p>
+  </div>
 </div>
 <script>
 (() => {
@@ -75,19 +71,9 @@
     cr.innerHTML = "<div>Prepared by</div><strong>Khalid Rumayh Alrumayh</strong><span>Information Systems Specialist</span>";
     document.getElementById("schedulePanel").append(cr);
   }
-  const fail = (t) => { document.getElementById("err").textContent = t; document.getElementById("go").disabled = false; };
-  document.getElementById("gateForm").onsubmit = async (e) => {
-    e.preventDefault();
-    const v = norm(document.getElementById("emp").value);
-    if (!v) return fail("اكتب رقمك الوظيفي");
-    document.getElementById("go").disabled = true;
-    if (!(await check(v))) return fail("الرقم غير معتمد لجدول العيادات. اطلب الصلاحية من حسابك في المنصة.");
-    try { sessionStorage.setItem(KEY, "yes"); } catch (e) {}
-    show().catch(() => fail("تعذّر تحميل الجدول، حاول مرة ثانية."));
-  };
-  let ok = false;
-  try { ok = sessionStorage.getItem(KEY) === "yes"; } catch (e) {}
-  if (ok) show().catch(() => {});
+  const fail = (t) => { document.getElementById("err").textContent = t; };
+  /* الجدول عام: يفتح لأي أحد عنده الرابط */
+  show().catch(() => fail("تعذّر تحميل الجدول، حدّث الصفحة وحاول مرة ثانية."));
 })();
 </script>
 </body>
