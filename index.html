@@ -267,8 +267,17 @@ const times=['07:30–11:30','11:30–15:30','15:30–19:30'];
 const $=id=>document.getElementById(id);
 const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').trim();
-const clinicAr={"Anesthesia":"التخدير","Chest":"الصدرية","Infectious disease":"الأمراض المعدية","Hematology":"أمراض الدم","Ophthalmology 1":"العيون 1","Ophthalmology 2":"العيون 2","Ophthalmology 3":"العيون 3","Pediatric":"الأطفال","Dev. & Beh. Disorder":"اضطرابات النمو والسلوك","Newborn":"حديثو الولادة","Physical Medicine & Rehabilitation":"الطب الطبيعي والتأهيل","Neurosurgery":"جراحة المخ والأعصاب","Psychiatric":"الطب النفسي","Gastroenterology":"الجهاز الهضمي","OB/Gyn":"النساء والولادة","Medical":"الباطنية","Cardiology":"القلب","Minor Surgery":"الجراحة الصغرى","Pediatric Surgery":"جراحة الأطفال","Surgery":"الجراحة العامة","Urology":"المسالك البولية","Orthopedic 1":"العظام 1","Orthopedic 2":"العظام 2","ENT":"الأنف والأذن والحنجرة","Dermatology":"الجلدية","Nephrology":"الكلى","Neurology":"الأعصاب","Rheumatology":"الروماتيزم","Plastic Surgery":"جراحة التجميل","Optometry 1":"قياس النظر 1","Optometry 2":"قياس النظر 2","Optometry 3":"قياس النظر 3","Audiology":"السمعيات","Psychotherapy":"العلاج النفسي","Quality of work life":"جودة الحياة الوظيفية","Orthopedic":"العظام","Orthopedic Screening":"فرز العظام","Orthopedic Fracture":"كسور العظام","DDH":"خلع الورك التطوري","Optometry":"بصريات","Optometry Screening":"فرز البصريات","Pediatric Optometry":"بصريات الأطفال","Ophthalmology":"العيون","Ophthalmology Screening":"فرز العيون","Ophthalmology (Laser)":"ليزر العيون","Phototherapy":"العلاج الضوئي"};
+const clinicAr={"Anesthesia":"التخدير","Chest":"الصدرية","Infectious disease":"الأمراض المعدية","Hematology":"أمراض الدم","Ophthalmology 1":"العيون 1","Ophthalmology 2":"العيون 2","Ophthalmology 3":"العيون 3","Pediatric":"الأطفال","Dev. & Beh. Disorder":"اضطرابات النمو والسلوك","Newborn":"حديثو الولادة","Physical Medicine & Rehabilitation":"الطب الطبيعي والتأهيل","Neurosurgery":"جراحة المخ والأعصاب","Psychiatric":"الطب النفسي","Gastroenterology":"الجهاز الهضمي","OB/Gyn":"النساء والولادة","Medical":"الباطنية","Cardiology":"القلب","Minor Surgery":"الجراحة الصغرى","Pediatric Surgery":"جراحة الأطفال","Surgery":"الجراحة العامة","Urology":"المسالك البولية","Orthopedic 1":"العظام 1","Orthopedic 2":"العظام 2","ENT":"الأنف والأذن والحنجرة","Dermatology":"الجلدية","Nephrology":"الكلى","Neurology":"الأعصاب","Rheumatology":"الروماتيزم","Plastic Surgery":"جراحة التجميل","Optometry 1":"قياس النظر 1","Optometry 2":"قياس النظر 2","Optometry 3":"قياس النظر 3","Audiology":"السمعيات","Psychotherapy":"العلاج النفسي","Quality of work life":"جودة الحياة الوظيفية","Orthopedic":"العظام","Orthopedic Screening":"فرز العظام","Orthopedic Fracture":"كسور العظام","DDH":"الخلوع الولادية","Optometry":"بصريات","Optometry Screening":"فرز البصريات","Pediatric Optometry":"بصريات الأطفال","Ophthalmology":"العيون","Ophthalmology Screening":"فرز العيون","Ophthalmology (Laser)":"ليزر العيون","Phototherapy":"العلاج الضوئي"};
 let lang='ar';
+const hipClinicTerms = ['الخلوع الولادية', 'خلع الورك التطوري', 'خلع الورك التطويري'];
+const hipClinicKey = value => {
+  const term = norm(value).replace(/^عياد[هة]\s+/, '');
+  return term === 'ddh' || hipClinicTerms.some(name => norm(name) === term) ? 'DDH' : value;
+};
+function normalizeHipClinics(rows) {
+  for (const row of rows) row.clinic = hipClinicKey(row.clinic);
+}
+normalizeHipClinics(SCH_DATA);
 const clinicName=c=>lang==='ar'?(clinicAr[c]||c):c;
 const clinicOrder=c=>{let m=c.match(/^(Ophthalmology|Optometry|Orthopedic)\s+(\d+)$/);return m?m[1]+String(m[2]).padStart(2,"0"):c};
 const roomNumber=x=>{const n=Number(x.room);return Number.isFinite(n)&&n>0?n:9999};
@@ -282,8 +291,8 @@ const arabicName=x=>x.name.split(/[\s.]+/).filter(Boolean).map(w=>arabicWords[w.
 function shownName(x){const en=nameMode==='full'?(x.fullName||x.name):x.name;return lang==='ar'?arabicName(x)+' | '+en:en}
 
 function render(){
- const q=norm($('schQuery').value),cl=$('schClinic').value,day=$('schDay').value;
- const a=SCH_DATA.filter(x=>(!q||norm(x.name+' '+arabicName(x)+' '+(x.fullName||'')+' '+x.clinic+' '+(clinicAr[x.clinic]||'')+' '+(x.room||'')).includes(q))&&(cl==='all'||x.clinic===cl)&&(day==='all'||String(x.day)===day)).sort((x,y)=>clinicOrder(x.clinic).localeCompare(clinicOrder(y.clinic),undefined,{numeric:true})||roomNumber(x)-roomNumber(y)||x.day-y.day||x.period-y.period);
+ const q=norm($('schQuery').value).replace(/^عياد[هة]\s+/, ''),cl=$('schClinic').value,day=$('schDay').value;
+ const a=SCH_DATA.filter(x=>(!q||norm(x.name+' '+arabicName(x)+' '+(x.fullName||'')+' '+x.clinic+' '+(x.clinic==='DDH'?hipClinicTerms.join(' '):(clinicAr[x.clinic]||''))+' '+(x.room||'')).includes(q))&&(cl==='all'||x.clinic===cl)&&(day==='all'||String(x.day)===day)).sort((x,y)=>clinicOrder(x.clinic).localeCompare(clinicOrder(y.clinic),undefined,{numeric:true})||roomNumber(x)-roomNumber(y)||x.day-y.day||x.period-y.period);
  $('schCount').textContent=`${a.length} فترة مجدولة مطابقة`;
  $('schShortNamesBtn').classList.toggle('active',nameMode==='short');$('schFullNamesBtn').classList.toggle('active',nameMode==='full');
  $('schNamesNote').textContent=nameMode==='full'?'الأسماء الرسمية للأطباء حسب السجل.':'أسماء الأطباء كما تظهر في الجدول.';
@@ -312,6 +321,7 @@ $('scheduleLaunch').onclick=()=>{$('scheduleLayer').classList.add('open');render
  const r=await fetch('https://omugonzzrulsdpnycact.supabase.co/rest/v1/rpc/opd_clinic_schedule_get',{method:'POST',cache:'no-store',headers:{apikey:'sb_publishable_f3IjPvIbMruO9jGb4SmT7Q_NOqgEbXs','Content-Type':'application/json'},body:'{}'});
  if(!r.ok)return;const d=await r.json();
  if(!d||!Array.isArray(d.SCH_DATA)||d.SCH_DATA.length<50||!Array.isArray(d.WEEK)||d.WEEK.length!==5)return;
+ normalizeHipClinics(d.SCH_DATA);
  SCH_DATA.splice(0,SCH_DATA.length,...d.SCH_DATA);WEEK.splice(0,WEEK.length,...d.WEEK);
  const cs=[...new Set(SCH_DATA.map(x=>x.clinic))].sort((a,b)=>clinicOrder(a).localeCompare(clinicOrder(b),undefined,{numeric:true})||Math.min(...SCH_DATA.filter(x=>x.clinic===a).map(roomNumber))-Math.min(...SCH_DATA.filter(x=>x.clinic===b).map(roomNumber)));
  clinics.splice(0,clinics.length,...cs);
