@@ -94,7 +94,7 @@ async function check(){
  }catch(e){show("تعذّر التحقق من الصلاحية. تأكد من الاتصال وحاول مرة ثانية.","فتح المنصة");}
 }
 go.onclick=function(){location.href=PORTAL;};
-check();
+window.OPD_GATE_READY=check();
 })();
 </script>
 
@@ -314,8 +314,10 @@ check();
   $("mine").onclick = showMine;
 
   loadMonth();
-  if (window.OPD_LEAVE_ELIGIBLE === true) loadNames();
-  else $("request").classList.add("hidden");
+  Promise.resolve(window.OPD_GATE_READY).finally(() => {
+    if (window.OPD_LEAVE_ELIGIBLE === true) loadNames();
+    else $("request").classList.add("hidden");
+  });
 })();
 </script>
 </body>
